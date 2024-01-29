@@ -48,7 +48,7 @@ export const registerUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const loginUser: RequestHandler = async (req, res, next) => {
+export const loginUser: RequestHandler = async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log(req.body)
@@ -82,15 +82,16 @@ export const loginUser: RequestHandler = async (req, res, next) => {
     res.cookie("authToken", AccessToken, { httpOnly: true });
     res.cookie("refreshToken", refereshToken, { httpOnly: true })
     res.cookie("id", id, { httpOnly: false })
+    res.header('authToken',AccessToken)
+ 
 
-    return res.status(201).json({
+    res.status(200).json({
       refereshToken,
       AccessToken,
       username ,
       message: "User logged in successfully",
     });
 
-    next();
   } catch (err) {
     return res.status(407).json({ message: err });
   }
